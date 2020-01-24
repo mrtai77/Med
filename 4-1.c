@@ -1,3 +1,4 @@
+/*巡回セールスマン問題を，全巡回順において総距離を計算し比較することで，最小巡回順と最小移動距離を求める*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -51,7 +52,7 @@ int main(){
     return 0;
 }
 
-/*都市座標データ読み込み 引数：struct TSP *tsp : TSPデータ*/
+/*都市座標データ読み込み*/
 void ReadData(struct TSP *tsp,int n,char name[]){
     tsp->N=n;
     /* open file */
@@ -73,7 +74,7 @@ void ReadData(struct TSP *tsp,int n,char name[]){
     fclose(fp);
 }
 
-/* 都市座標データ表示 引数：struct TSP *tsp : TSPデータ*/
+/* 都市座標データ表示*/
 void ShowData(struct TSP *tsp){
     int j;
     /* データ表示 */
@@ -83,6 +84,7 @@ void ShowData(struct TSP *tsp){
     }
 }
 
+/*初期巡回順の決定*/
 void FirstOrder(struct TSP *tsp){
     int k;
     for(k=0;k<tsp->N;k++){
@@ -90,7 +92,7 @@ void FirstOrder(struct TSP *tsp){
     }
 }
 
-/*巡回順の決定 引数：struct TSP *tsp : TSPデータ*/
+/*巡回順の入れ替えを全通り行い最小巡回順と最小移動距離の更新を行う*/
 void SimpleOrder(struct TSP *tsp,int n){
     int l;
     if(n<=1){
@@ -113,7 +115,7 @@ void SimpleOrder(struct TSP *tsp,int n){
     }
 }
         
-    /*巡回順入れ替え*/
+/*巡回順入れ替え*/
 void Change(struct TSP *tsp,int x,int y){
     char c;
     c=tsp->order[x];
@@ -121,6 +123,7 @@ void Change(struct TSP *tsp,int x,int y){
     tsp->order[y]=c;
 }
     
+/*最小巡回順と最小移動距離の表示*/
 void MinOrder(struct TSP *tsp){
     int z;
     /*最小距離の表示*/
@@ -139,7 +142,7 @@ void MinOrder(struct TSP *tsp){
     printf("C%2d\n",tsp->min_order[0]+1);
 }
 
-/*総移動距離を計算する 引数：struct TSP *tsp : TSPデータ*/
+/*総移動距離を計算する*/
 void CalcCost(struct TSP *tsp){
     int a;
     float total_dist=0;
@@ -154,12 +157,12 @@ void CalcCost(struct TSP *tsp){
     tsp->cost=total_dist;
 }
 
-/*２都市間の距離を計算 引数：struct City a : 都市1   引数：struct City b : 都市2  戻り値：距離*/
+/*２都市間の距離を計算*/
 float CalcDistance(struct City a, struct City b){
     return sqrt(((b.x)*(a.x))+((b.y)*(a.y)));
 }
 
-/*巡回順と総移動距離を表示  引数：struct TSP *tsp : TSPデータ */
+/*巡回順と総移動距離を表示*/
 void ShowCost(struct TSP *tsp){
     int b;
     for (b=0;b<tsp->N;b++){
@@ -168,6 +171,7 @@ void ShowCost(struct TSP *tsp){
     printf("C%2d  cost=%7.1f\n", tsp->order[0] + 1, tsp->cost);
 }
 
+/*最小巡回順と最小移動距離の更新*/
 void CompiarMin(struct TSP *tsp){
     int d;
     if(tsp->cost<tsp->min_cost){
