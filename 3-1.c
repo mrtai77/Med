@@ -1,3 +1,4 @@
+/*振幅と周波数を任意で設定できる正弦波に対しフーリエ変換を行い，主に含まれている周波数帯を検出する*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
