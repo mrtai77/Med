@@ -29,7 +29,7 @@ int main(){
     float *diff=(float*)malloc(sizeof(float)*N);
     float *period=(float*)malloc(sizeof(float)*N);
     int M=5;
-    /*maの入手*/
+    /*移動平均値の入手*/
     for(i=M-1;i<=N-1;i++){
         respma[i]=0;
         for(j=0;j<=M-1;j++){
@@ -37,13 +37,14 @@ int main(){
         }
         respma[i]/=M;
     }
-    /*diffの入手*/
+    /*隣り合う2データ間の差分を入手*/
     for(i=M-1;i<=N-1;i++){
         diff[i]=respma[i+1]-respma[i];
     }
     /*極大点の時間入手*/
     j=0;/*呼吸数を記録*/
     for(i=M-1;i<=N-1;i++){
+        /*変化率が正から負に変わり，かつ，閾値よりも高い時刻を検出し心電図中のR波を検出する*/
         if(diff[i-1]>=0 && diff[i]<=0 && respma[i]>1200){
             printf("ピーク時刻:%f\n",etime[(i-(M/2))]);
             period[j]=etime[i-(M/2)];
@@ -58,7 +59,7 @@ int main(){
     }
     total/=(j-1);
     printf("R波間隔の平均値:%fs\n心拍数:%f回\n",total/20,(float)60/(total/20));
-    
+    /*ending*/
     fclose(fp);
     free(etime);
     free(resp);
