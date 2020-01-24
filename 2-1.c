@@ -1,3 +1,4 @@
+/*呼吸波形データを読み込み微分の要素を用いてR波周期や，それに基づき呼吸周期を検出する*/
 #include <stdio.h>
 #include <stdlib.h>
 #define BUF_SIZE 256
