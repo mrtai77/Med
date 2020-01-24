@@ -1,3 +1,5 @@
+/*呼吸波形データを読み取り，呼吸数や呼吸周期を計算する*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #define BUF_SIZE 256
@@ -16,7 +18,7 @@ int main(){
     /*ファイルの一行目を入手*/
     fgets(buf, BUF_SIZE, fp);
     sscanf(buf,"%d\n", &N);
-    /*銅的配列の確保*/
+    /*動的配列の確保*/
     int *etime=(int*)malloc(sizeof(int)*N);
     int *resp=(int*)malloc(sizeof(int)*N);
 
@@ -37,15 +39,8 @@ int main(){
         sscanf(buf,"%d,%d\n", &etime[i], &resp[i]);
         printf("%dms:%d\n", etime[i], resp[i]);
     }
- 
-/*データの末尾から5つを表示*/
-    /*末尾を表示*/
-    for(i=N-1;i>=N-5;i--){
-        printf("%dms:%d\n", etime[i], resp[i]);
-    }
     
-/*振幅の最大最小平均の導出*/
-    printf("\n課題3\n");
+/*呼吸振幅の最大値，最小値，平均値の導出*/
     int Max=0,Min=1000,total=0;
     double Ave;
     /*データの最大値の入手*/
@@ -68,10 +63,10 @@ int main(){
     printf("Max:%d  Min:%d  Ave:%f\n",Max,Min,Ave);
 
 /*移動平均の導出*/
-    /*銅的配列の確保*/
+    /*動的配列の確保*/
     float *respma=(float*)malloc(sizeof(float)*N);
     int M=5;
-    /*maの入手*/
+    /*移動平均値の入手*/
     for(i=M-1;i<=N-1;i++){
         respma[i]=0;
         for(j=0;j<=M-1;j++){
@@ -79,14 +74,13 @@ int main(){
         }
         respma[i]/=M;
     }
-    /*1000~1100msの範囲のma表示*/
+    /*1000~1100msの範囲の移動平均値を表示*/
      for(i=0;i<N-1;i++){
         if(etime[i]>=1000&&etime[i]<=1100)
             printf("moving average: %f\n",respma[i]);
     }
     
-/*平均値との交差点の導出*/
-    /*銅的配列の確保*/
+/*平均値との交差点を検出し，一呼吸が終了するごとに時間を記録する*/
     int *period=(int*)malloc(sizeof(int)*N);
     int time=0;
     for(i=M-1;i<=N-1;i++){
@@ -98,14 +92,14 @@ int main(){
         }
     }
     
-/*周期平均の導出*/
+/*呼吸周期平均の導出*/
     double t_peri[8];
     /*各周期ごとに導出と表示*/
     for(time=0;time<8;time++){
         t_peri[time]=period[time+1]-period[time];
         printf("period%d: %d\n",time+1,(int)t_peri[time]);
     }
-    /*平均周期の導出表示*/
+    /*平均周期の導出と表示*/
     double Ave_period=0;
     for(time=0;time<9;time++){
         Ave_period+=t_peri[time];
