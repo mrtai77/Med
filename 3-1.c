@@ -19,7 +19,7 @@ int main(){
     /*振幅の設定*/
     float amp=1;
     /*周波数の設定*/
-    float fre=3;
+    float fre=1;
     /*信号の離散化*/
     for(k=0;k<N;k++){
         g[k]=amp*sin((2*pi*k*fre)/(N));
